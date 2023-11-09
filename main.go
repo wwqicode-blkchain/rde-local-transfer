@@ -3,21 +3,30 @@ package main
 import (
 	"context"
 	"fmt"
+	"math/big"
+	"strings"
+
 	"github.com/ethereum/go-ethereum/accounts/abi"
 	"github.com/ethereum/go-ethereum/common"
 	"github.com/ethereum/go-ethereum/core/types"
 	"github.com/ethereum/go-ethereum/crypto"
 	"github.com/ethereum/go-ethereum/ethclient"
-	"math/big"
-	"strings"
 	"try_rde/abistr"
 )
 
 const (
-	l1URL          = "http://localhost:8545"
-	l2URL          = "http://localhost:9545"
-	l1ContractAddr = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9" //proxy addr
-	l2ContractAddr = "0x4200000000000000000000000000000000000010"
+	L1URL              = "http://localhost:8545"
+	L2URL              = "http://localhost:9545"
+	l1ContractAddr     = "0xDc64a140Aa3E981100a9becA4E685f962f0cF6C9" //proxy addr
+	l2ContractAddr     = "0x4200000000000000000000000000000000000010"
+	legacyERC20MNTAddr = "0xDeadDeAddeAddEAddeadDEaDDEAdDeaDDeAD0000"
+	WETH9Addr          = "0xdEAddEaDdeadDEadDEADDEAddEADDEAddead1111" //"0x4200000000000000000000000000000000000006"
+	//l2StandardBridgeAddr = "0xC0d3c0d3c0D3c0d3C0D3c0D3C0d3C0D3C0D30010"
+	L2_CROSS_DOMAIN_MESSENGER_AddrHex         = "0x4200000000000000000000000000000000000007"
+	Proxy__BVM_L1CrossDomainMessenger_AddrHex = "0x0165878A594ca255338adfa4d48449f69242Eb8F"
+	L2ToL1MessagePasser                       = "0x4200000000000000000000000000000000000016"
+	L1OptimismPortal                          = "0xa513E6E4b8f2a923D98304ec87F64353C4D5C853"
+	L2OutputOracleProxy                       = "0x5FC8d32690cc91D4c39d9d3abcBD16989F875707"
 
 	account1  = "0x784e50947Df23dBa8f91029089ef7B046257E544"
 	account4  = "0x70997970C51812dc3A010C7d01b50e0d17dc79C8"
@@ -29,7 +38,7 @@ const (
 )
 
 func main() {
-	l1Client, err := ethclient.Dial(l1URL)
+	l1Client, err := ethclient.Dial(L1URL)
 	if err != nil {
 		fmt.Printf("[err 00] %s\n", err.Error())
 	}
